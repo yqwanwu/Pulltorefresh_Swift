@@ -25,6 +25,7 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
     
     var originalTop: CGFloat = 0.0
     var originalBottom: CGFloat = 0.0
+    var hideWhenComplete = true
     
     ///当滑动到底部时自动加载，不需要上拉，仅对上拉加载有效
     var autoLoadWhenIsBottom = true
@@ -73,6 +74,7 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
         super.layoutSubviews()
         self.originalTop = self.scrollView.contentInset.top
         self.originalBottom = self.scrollView.contentInset.bottom
+        self.isHidden = hideWhenComplete
     }
     
     ///add actions
@@ -99,6 +101,7 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
             }
         }, completion: { (f) in
             completion?()
+            self.isHidden = self.hideWhenComplete
         })
         self.state = .end
     }
@@ -289,8 +292,121 @@ class PullToRefreshDefaultFooter: PullToRefreshView {
     
 }
 
+class PullToRefreshGifItem: NSObject {
+    var imgDataArr = [UIImage]()
+    var gifData: Data?
+    var animationTime = 0.0
+    var isGif = false
+    
+    init(imgDataArr: [UIImage], animationTime: Double?) {
+        super.init()
+        self.imgDataArr = imgDataArr
+        self.animationTime = animationTime ?? 0.0
+    }
+    
+    init(gifData: Data) {
+        super.init()
+        self.gifData = gifData
+        self.isGif = true
+    }
+}
 
+class PullToRefreshDefaultGifHeader: PullToRefreshDefaultHeader {
+    private let gifImgArrView = UIImageView()
+    private let gifView = UIWebView()
+    
+    private var gifItem = [PullToRefreshState:PullToRefreshGifItem]()
+    
+    override var state: PullToRefreshState {
+        didSet {
+            if oldValue != state {
+//                gifImgArrView.stopAnimating()
+            }
+        }
+    }
+    
+    var gifFrame = CGRect.zero {
+        didSet {
+            gifImgArrView.frame = gifFrame
+            gifView.frame = gifFrame
+        }
+    }
+    
+    override var progress: CGFloat {
+        didSet {
+            if oldValue != progress {
+                if let item = gifItem[state], state == .pulling {
+                    showGifImg(item: item)
+                }
+            }
+        }
+    }
+    
+    func showGifImg(item: PullToRefreshGifItem) {
+        gifView.isHidden = !item.isGif
+        gifImgArrView.isHidden = item.isGif
+        
+        if item.isGif {
+            if let gifData = gifItem[state]?.gifData {
+                gifView.load(gifData, mimeType: "image/gif", textEncodingName: "UTF-8", baseURL: URL(fileURLWithPath: ""))
+            }
+            gifImgArrView.stopAnimating()
+        } else {
+            if item.imgDataArr.count > 0 {
+                gifImgArrView.stopAnimating()
+                
+                if item.animationTime > 0 {
+                    gifImgArrView.animationDuration = item.animationTime
+                    gifImgArrView.animationImages = item.imgDataArr
+                    gifImgArrView.animationRepeatCount = Int.max
+                    gifImgArrView.startAnimating()
+                } else {
+                    let index = Int(progress * CGFloat(item.imgDataArr.count - 1))
+                    gifImgArrView.image = item.imgDataArr[index]
+                }
+            }
+        }
+    }
+    
+    override func whenRefreshing() {
+        super.whenRefreshing()
+        
+        if let item = gifItem[state], state == .refreshing {
+            activityIndicator.isHidden = true
+            showGifImg(item: item)
+        }
+    }
+    
+    /** 不设置time，就根据 progress 进度做动画，一般用于 拉动过程 */
+    @discardableResult
+    func setImgArr(state: PullToRefreshState, imgs: [UIImage], animationTime: Double? = nil) -> Self {
+        gifItem[state] = PullToRefreshGifItem(imgDataArr: imgs, animationTime: animationTime)
+        return self
+    }
+    
+    @discardableResult
+    func setGifData(state: PullToRefreshState, gifData: Data) -> Self {
+        gifItem[state] = PullToRefreshGifItem(gifData: gifData)
+        gifView.load(gifData, mimeType: "image/gif", textEncodingName: "UTF-8", baseURL: URL(fileURLWithPath: ""))
+        return self
+    }
+    
+    required convenience init(frame: CGRect, scrollView: UIScrollView) {
+        self.init(frame: frame)
+        self.scrollView = scrollView
+        self.refreshHeight = frame.height
+        self.addSubview(activityIndicator)
+        activityIndicator.isHidden = true
+        
+        self.addSubview(titleLabel)
+        self.addSubview(gifImgArrView)
+        self.addSubview(gifView)
+        gifView.scalesPageToFit = true
+        gifImgArrView.contentMode = .scaleAspectFill
+        gifImgArrView.clipsToBounds = true
+    }
 
+}
 
 
 

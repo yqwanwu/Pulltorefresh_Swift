@@ -60,7 +60,7 @@
         <!--自定义下拉刷新-->
         <scene sceneID="y7y-Vx-Sfg">
             <objects>
-                <tableViewController id="7Ra-z0-uTf" customClass="CustomTableViewController" customModule="reuseTest" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="7Ra-z0-uTf" customClass="CustomTableViewController" customModule="Pulltorefresh_Swift" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="hmU-CC-RTf">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -97,10 +97,10 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="自定义下拉刷新" id="gZi-eG-T0l">
-                        <leftBarButtonItems>
-                            <barButtonItem title="下拉" id="0XT-Hp-fSb">
+                        <rightBarButtonItems>
+                            <barButtonItem title="改变方式" id="TOu-bo-5p1">
                                 <connections>
-                                    <action selector="ac_down:" destination="7Ra-z0-uTf" id="cem-Mz-DY7"/>
+                                    <action selector="ac_close:" destination="7Ra-z0-uTf" id="ETO-5Z-4YQ"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem title="上拉" id="Jbw-Zc-QmW">
@@ -108,12 +108,12 @@
                                     <action selector="ac_up:" destination="7Ra-z0-uTf" id="6D2-P1-0O9"/>
                                 </connections>
                             </barButtonItem>
-                        </leftBarButtonItems>
-                        <barButtonItem key="rightBarButtonItem" title="改变方式" id="TOu-bo-5p1">
-                            <connections>
-                                <action selector="ac_close:" destination="7Ra-z0-uTf" id="ETO-5Z-4YQ"/>
-                            </connections>
-                        </barButtonItem>
+                            <barButtonItem title="下拉" id="0XT-Hp-fSb">
+                                <connections>
+                                    <action selector="ac_down:" destination="7Ra-z0-uTf" id="cem-Mz-DY7"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LmD-dI-lDN" userLabel="First Responder" sceneMemberID="firstResponder"/>

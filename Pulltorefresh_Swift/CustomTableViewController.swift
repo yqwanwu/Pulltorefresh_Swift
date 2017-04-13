@@ -16,7 +16,11 @@ class CustomTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        p = PullToRefreshControl(scrollView: tableView).addDefaultHeader().addDefaultFooter()
+//        p = PullToRefreshControl(scrollView: tableView).addDefaultHeader(config: { (header) in
+//            header.titleLabel.textColor = UIColor.red
+//        }).addDefaultFooter()
+        
+        p = PullToRefreshControl(scrollView: tableView).addGifHeader().addDefaultFooter()
         
         p.header?.addAction(with: .refreshing, action: { [unowned self] _ in
             //模拟数据请求
@@ -36,6 +40,8 @@ class CustomTableViewController: UITableViewController {
         }).addAction(with: .end, action: { 
             print("加载完了")
         })
+        
+        
     }
     @IBAction func ac_down(_ sender: Any) {
         p.header?.beginRefresh()

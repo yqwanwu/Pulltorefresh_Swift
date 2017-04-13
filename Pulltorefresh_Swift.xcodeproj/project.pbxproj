@@ -17,6 +17,8 @@
 		96195F9B1E9E1FA4008ACB33 /* PullToRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96195F971E9E1FA4008ACB33 /* PullToRefreshView.swift */; };
 		96195F9C1E9E1FA4008ACB33 /* PullToRefreshControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96195F981E9E1FA4008ACB33 /* PullToRefreshControl.swift */; };
 		96195F9E1E9E1FF2008ACB33 /* CustomTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96195F9D1E9E1FF2008ACB33 /* CustomTableViewController.swift */; };
+		96195FA01E9F1D7B008ACB33 /* timg.gif in Resources */ = {isa = PBXBuildFile; fileRef = 96195F9F1E9F1D7B008ACB33 /* timg.gif */; };
+		96195FA41E9F6A0E008ACB33 /* luufy.gif in Resources */ = {isa = PBXBuildFile; fileRef = 96195FA31E9F6A0E008ACB33 /* luufy.gif */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,8 @@
 		96195F971E9E1FA4008ACB33 /* PullToRefreshView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullToRefreshView.swift; sourceTree = "<group>"; };
 		96195F981E9E1FA4008ACB33 /* PullToRefreshControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullToRefreshControl.swift; sourceTree = "<group>"; };
 		96195F9D1E9E1FF2008ACB33 /* CustomTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTableViewController.swift; sourceTree = "<group>"; };
+		96195F9F1E9F1D7B008ACB33 /* timg.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = timg.gif; sourceTree = "<group>"; };
+		96195FA31E9F6A0E008ACB33 /* luufy.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = luufy.gif; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +73,7 @@
 				96195F9D1E9E1FF2008ACB33 /* CustomTableViewController.swift */,
 				96195F941E9E1F9A008ACB33 /* pulltoRefresh */,
 				96195F861E9E1F80008ACB33 /* Main.storyboard */,
+				96195FA31E9F6A0E008ACB33 /* luufy.gif */,
 				96195F891E9E1F80008ACB33 /* Assets.xcassets */,
 				96195F8B1E9E1F80008ACB33 /* LaunchScreen.storyboard */,
 				96195F8E1E9E1F80008ACB33 /* Info.plist */,
@@ -79,6 +84,7 @@
 		96195F941E9E1F9A008ACB33 /* pulltoRefresh */ = {
 			isa = PBXGroup;
 			children = (
+				96195F9F1E9F1D7B008ACB33 /* timg.gif */,
 				96195F951E9E1FA4008ACB33 /* TimerExtension.swift */,
 				96195F961E9E1FA4008ACB33 /* CircleProgressView.swift */,
 				96195F971E9E1FA4008ACB33 /* PullToRefreshView.swift */,
@@ -148,7 +154,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				96195F8D1E9E1F80008ACB33 /* LaunchScreen.storyboard in Resources */,
+				96195FA01E9F1D7B008ACB33 /* timg.gif in Resources */,
 				96195F8A1E9E1F80008ACB33 /* Assets.xcassets in Resources */,
+				96195FA41E9F6A0E008ACB33 /* luufy.gif in Resources */,
 				96195F881E9E1F80008ACB33 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -332,6 +340,7 @@
 				96195F931E9E1F80008ACB33 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
