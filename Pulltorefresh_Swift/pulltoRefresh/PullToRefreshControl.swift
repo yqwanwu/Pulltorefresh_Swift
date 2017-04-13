@@ -30,7 +30,7 @@ class PullToRefreshControl: NSObject {
     
     @discardableResult
     func addDefaultHeader() -> Self {
-        header = PullToRefreshDefaultHeader(frame: CGRect(x: 0, y: -80, width: scrollView.frame.width, height: 80), scrollView: scrollView)
+        header = PullToRefreshDefaultHeader(frame: CGRect(x: 0, y: -60, width: scrollView.frame.width, height: 60), scrollView: scrollView)
         scrollView.insertSubview(header!, at: 0)
         return self
     }
@@ -49,9 +49,7 @@ class PullToRefreshControl: NSObject {
                 case UIGestureRecognizerState.began.rawValue:
                     state = .begin
                 case UIGestureRecognizerState.ended.rawValue, UIGestureRecognizerState.cancelled.rawValue:
-                    if header?.state == .pullingComplate || footer?.state == .pullingComplate {
-                        state = .refreshing
-                    }
+                    state = .refreshing
                 case UIGestureRecognizerState.changed.rawValue:
                     state = .pulling
                 default:
@@ -60,12 +58,24 @@ class PullToRefreshControl: NSObject {
                 
                 let visiableHeight_header = -scrollView.contentOffset.y - scrollView.contentInset.top
                 if visiableHeight_header > 0 && state != header?.state && header?.state != .refreshing {
-                    header?.state = state
+                    if state == .refreshing {
+                        if header?.state == .pullingComplate {
+                            header?.state = state
+                        }
+                    } else {
+                        header?.state = state
+                    }
                 }
                 
                 let visiableHeight_footer = scrollView.contentOffset.y + scrollView.frame.height - scrollView.contentInset.bottom - scrollView.contentSize.height
                 if visiableHeight_footer > 0 && state != footer?.state && footer?.state != .refreshing {
-                    footer?.state = state
+                    if state == .refreshing {
+                        if footer?.state == .pullingComplate {
+                            footer?.state = state
+                        }
+                    } else {
+                        footer?.state = state
+                    }
                 }
             }
         } else if keyPath == "contentOffset" {
@@ -80,7 +90,7 @@ class PullToRefreshControl: NSObject {
                     
                     if let footer = footer {
                         let visiableHeight = point.y + scrollView.frame.height - scrollView.contentInset.bottom - scrollView.contentSize.height
-                        if visiableHeight > 0 && footer.state != .refreshing {
+                        if visiableHeight > 0 && footer.state != .refreshing && scrollView.contentSize.height > 0 {
                             /// - header.margin - 5 防止进度增加过快，
                             if footer.autoLoadWhenIsBottom && scrollView.contentSize.height > 0 {
                                 footer.beginRefresh()
