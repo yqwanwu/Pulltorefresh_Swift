@@ -208,16 +208,7 @@ class PullToRefreshDefaultHeader: PullToRefreshView {
 
 
 
-class PullToRefreshDefaultFooter: PullToRefreshView {
-    lazy var titleLabel: UILabel = {
-        let l = UILabel()
-        l.adjustsFontSizeToFitWidth = true
-        l.text = "上拉加载更多"
-        l.textAlignment = .center
-        l.textColor = UIColor.gray
-        return l
-    }()
-    
+class PullToRefreshDefaultFooter: PullToRefreshDefaultHeader {
     required convenience init(frame: CGRect, scrollView: UIScrollView) {
         self.init(frame: frame)
         self.scrollView = scrollView
@@ -228,68 +219,8 @@ class PullToRefreshDefaultFooter: PullToRefreshView {
         self.addSubview(progressView)
         
         self.type = .footer
+        titles = [.pulling:"上拉加载更多", .pullingComplate:"松开加载", .refreshing:"加载中...", .end:"完成"]
     }
-    
-    var progressViewWidth: CGFloat = 30
-    ///修改此属性更改提示信息， 前提是写得有
-    var titles: [PullToRefreshState:String] = [.pulling:"上拉加载更多", .pullingComplate:"松开加载", .refreshing:"加载中...", .end:"完成"]
-    
-    lazy var progressView: CircleProgressView = {
-        let c = CircleProgressView(frame: CGRect(x: 0, y: 0, width: self.progressViewWidth, height: self.progressViewWidth))
-        c.progress = 0
-        c.changeWithTimer = false
-        c.tipLabel.isHidden = true
-        c.lineWidth = 2
-        c.circleColor = UIColor.blue
-        return c
-    } ()
-    
-    override var state: PullToRefreshState {
-        didSet {
-            if state != oldValue {
-                titleLabel.text = titles[state]
-            }
-        }
-    }
-    
-    override var progress: CGFloat {
-        didSet {
-            animationForPulling()
-        }
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        let ratio: CGFloat = 0.34
-        let centerY = margin + progressViewWidth / 2
-        
-        titleLabel.frame = CGRect(x: 0, y: 0, width: frame.width * (1 - ratio), height: 60)
-        titleLabel.center = CGPoint(x: self.frame.width / 2, y: centerY)
-        progressView.center = CGPoint(x: ratio * frame.width - progressViewWidth / 2, y: centerY)
-        
-    }
-    
-    func animationForPulling() {
-        progressView.progress = Double(self.progress)
-    }
-    
-    override func whenRefreshing() {
-        super.whenRefreshing()
-        self.progressView.isHidden = true
-        self.activityIndicator.isHidden = false
-        activityIndicator.startAnimating()
-        activityIndicator.center = progressView.center
-    }
-    
-    override func endRefresh(completion: (() -> Void)? = nil) {
-        super.endRefresh(completion: {
-            self.progressView.isHidden = false
-            self.activityIndicator.stopAnimating()
-        })
-        self.activityIndicator.isHidden = true
-    }
-    
 }
 
 class PullToRefreshGifItem: NSObject {

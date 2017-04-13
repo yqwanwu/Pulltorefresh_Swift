@@ -125,6 +125,7 @@ class PullToRefreshControl: NSObject {
                         if visiableHeight > 0 && footer.state != .refreshing && scrollView.contentSize.height > 0 {
                             /// - header.margin - 5 防止进度增加过快，
                             if footer.autoLoadWhenIsBottom && scrollView.contentSize.height > 0 {
+                                footer.isHidden = false
                                 footer.beginRefresh()
                             } else {
                                 let p = min(1.0, (abs(visiableHeight) - footer.margin - 5) / footer.refreshHeight)
