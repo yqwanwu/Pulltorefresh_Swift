@@ -43,7 +43,7 @@ class CustomTableViewController: UITableViewController {
         
         p.header?.addAction(with: .refreshing, action: { [unowned self] _ in
             //模拟数据请求
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5, execute: {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3, execute: {
                 self.p.header?.endRefresh()
                 self.counter = 20
                 self.tableView.reloadData()
