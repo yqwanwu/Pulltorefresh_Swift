@@ -42,6 +42,7 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
                 switch state {
                 case .refreshing:
                     whenRefreshing()
+                    self.isHidden = false
                 default:
                     break
                 }
@@ -243,10 +244,10 @@ class PullToRefreshGifItem: NSObject {
 }
 
 class PullToRefreshDefaultGifHeader: PullToRefreshDefaultHeader {
-    private let gifImgArrView = UIImageView()
-    private let gifView = UIWebView()
+    fileprivate let gifImgArrView = UIImageView()
+    fileprivate let gifView = UIWebView()
     
-    private var gifItem = [PullToRefreshState:PullToRefreshGifItem]()
+    fileprivate var gifItem = [PullToRefreshState:PullToRefreshGifItem]()
     
     override var state: PullToRefreshState {
         didSet {
@@ -337,6 +338,27 @@ class PullToRefreshDefaultGifHeader: PullToRefreshDefaultHeader {
         gifImgArrView.clipsToBounds = true
     }
 
+}
+
+class PullToRefreshDefaultGifFooter: PullToRefreshDefaultGifHeader {
+    required convenience init(frame: CGRect, scrollView: UIScrollView) {
+        self.init(frame: frame)
+        
+        self.scrollView = scrollView
+        self.refreshHeight = frame.height
+        self.addSubview(activityIndicator)
+        activityIndicator.isHidden = true
+        
+        self.addSubview(titleLabel)
+        self.addSubview(gifImgArrView)
+        self.addSubview(gifView)
+        gifView.scalesPageToFit = true
+        gifImgArrView.contentMode = .scaleAspectFill
+        gifImgArrView.clipsToBounds = true
+        
+        self.type = .footer
+        titles = [.pulling:"上拉加载更多", .pullingComplate:"松开加载", .refreshing:"加载中...", .end:"完成"]
+    }
 }
 
 

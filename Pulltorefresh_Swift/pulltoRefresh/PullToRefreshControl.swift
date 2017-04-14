@@ -39,26 +39,26 @@ class PullToRefreshControl: NSObject {
     }
     
     @discardableResult
-    func addGifHeader() -> Self {
+    func addGifHeader(config: (_ header: PullToRefreshDefaultGifHeader) -> Void) -> Self {
         let gifHeader = PullToRefreshDefaultGifHeader(frame: CGRect(x: 0, y: -80, width: scrollView.frame.width, height: 80), scrollView: scrollView)
         header = gifHeader
         scrollView.insertSubview(header!, at: 0)
-        var imgArr = [UIImage]()
-        for i in 1...8 {
-            imgArr.append(UIImage(named: "timg\(i)")!)
-        }
-        gifHeader.setImgArr(state: .pulling, imgs: imgArr)
         gifHeader.gifFrame = CGRect(x: 40, y: 20, width: 100, height: 60)
         
-        gifHeader.setImgArr(state: .refreshing, imgs: imgArr, animationTime: 2.0)
+        config(gifHeader)
         
-        let url = Bundle.main.url(forResource: "luufy", withExtension: "gif")
-        let data = try! Data(contentsOf: url!)
-        gifHeader.setGifData(state: .pulling, gifData: data)
+        return self
+    }
+    
+    @discardableResult
+    func addGifFooter(config: (_ footer: PullToRefreshDefaultGifFooter) -> Void) -> Self {
+        let y = scrollView.contentSize.height + scrollView.contentInset.bottom
+        let gifFooter = PullToRefreshDefaultGifFooter(frame: CGRect(x: 0, y: y, width: scrollView.frame.width, height: 80), scrollView: scrollView)
+        footer = gifFooter
+        scrollView.insertSubview(gifFooter, at: 0)
+        gifFooter.gifFrame = CGRect(x: 40, y: 20, width: 100, height: 60)
         
-        let url1 = Bundle.main.url(forResource: "timg", withExtension: "gif")
-        let data1 = try! Data(contentsOf: url1!)
-        gifHeader.setGifData(state: .refreshing, gifData: data1)
+        config(gifFooter)
         
         return self
     }
