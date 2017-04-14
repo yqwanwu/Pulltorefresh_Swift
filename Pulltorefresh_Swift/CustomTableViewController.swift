@@ -38,12 +38,15 @@ class CustomTableViewController: UITableViewController {
             let url1 = Bundle.main.url(forResource: "timg", withExtension: "gif")
             let data1 = try! Data(contentsOf: url1!)
             gifFooter.setGifData(state: .refreshing, gifData: data1)
+            
         })
         
         p.header?.addAction(with: .refreshing, action: { [unowned self] _ in
             //模拟数据请求
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5, execute: {
                 self.p.header?.endRefresh()
+                self.counter = 20
+                self.tableView.reloadData()
             })
         }).addAction(with: .end, action: { 
             print("那啥 结束了都")
@@ -54,6 +57,9 @@ class CustomTableViewController: UITableViewController {
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3, execute: {
                 self.p.footer?.endRefresh()
                 self.tableView.reloadData()
+                if self.counter > 40 {
+                    self.p.footer?.state = .noMoreData
+                }
             })
         }).addAction(with: .end, action: { 
             print("加载完了")

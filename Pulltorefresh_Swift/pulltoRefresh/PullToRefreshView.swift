@@ -11,7 +11,7 @@ import UIKit
 
 enum PullToRefreshState: Int {
     ///  刷新中，    开始拉动， 结束， 拉动中， 普通状态,   拉满     
-    case refreshing, begin, end, pulling, wait, pullingComplate
+    case refreshing, begin, end, pulling, wait, pullingComplate, noMoreData
 }
 
 enum PullToRefreshType: Int {
@@ -33,11 +33,25 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
     private var actions = [PullToRefreshState:() -> Void]()
     
     var refreshHeight: CGFloat = 100.0
+    ///修改此属性更改提示信息， 前提是写得有
+    var titles: [PullToRefreshState:String] = [.pulling:"下拉刷新", .pullingComplate:"松开刷新", .refreshing:"更新中...", .end:"完成"]
+    
     ///头部距离下边 或 底部距离上边的距离
     var margin: CGFloat = 10
-    var type = PullToRefreshType.header
+    var type = PullToRefreshType.header {
+        didSet {
+            if type == .footer {
+                titles = [.pulling:"上拉加载更多", .pullingComplate:"松开加载", .refreshing:"加载中...", .end:"完成", .noMoreData:"没有更多数据"]
+            }
+        }
+    }
     var state: PullToRefreshState = .wait {
         didSet {
+            //特殊标记
+            if state == .noMoreData {
+                return
+            }
+            
             if oldValue != state {
                 switch state {
                 case .refreshing:
@@ -108,6 +122,9 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
     }
     
     func beginRefresh() {
+        if state == .noMoreData {
+            return
+        }
         self.state = .refreshing
         UIView.animate(withDuration: 0.6, animations: {
             if self.type == .header {
@@ -137,8 +154,6 @@ class PullToRefreshDefaultHeader: PullToRefreshView {
     }()
     
     var progressViewWidth: CGFloat = 30
-    ///修改此属性更改提示信息， 前提是写得有
-    var titles: [PullToRefreshState:String] = [.pulling:"下拉刷新", .pullingComplate:"松开刷新", .refreshing:"更新中...", .end:"完成"]
     
     lazy var progressView: CircleProgressView = {
         let c = CircleProgressView(frame: CGRect(x: 0, y: 0, width: self.progressViewWidth, height: self.progressViewWidth))
@@ -210,6 +225,16 @@ class PullToRefreshDefaultHeader: PullToRefreshView {
 
 
 class PullToRefreshDefaultFooter: PullToRefreshDefaultHeader {
+    
+    override var state: PullToRefreshState {
+        didSet {
+            if state == .noMoreData {
+                self.activityIndicator.isHidden = true
+                self.progressView.isHidden = true
+            }
+        }
+    }
+    
     required convenience init(frame: CGRect, scrollView: UIScrollView) {
         self.init(frame: frame)
         self.scrollView = scrollView
@@ -341,6 +366,17 @@ class PullToRefreshDefaultGifHeader: PullToRefreshDefaultHeader {
 }
 
 class PullToRefreshDefaultGifFooter: PullToRefreshDefaultGifHeader {
+    override var state: PullToRefreshState {
+        didSet {
+            if state == .noMoreData {
+                self.activityIndicator.isHidden = true
+                self.progressView.isHidden = true
+                self.gifImgArrView.isHidden = true
+                self.gifView.isHidden = true
+            }
+        }
+    }
+    
     required convenience init(frame: CGRect, scrollView: UIScrollView) {
         self.init(frame: frame)
         
@@ -357,7 +393,6 @@ class PullToRefreshDefaultGifFooter: PullToRefreshDefaultGifHeader {
         gifImgArrView.clipsToBounds = true
         
         self.type = .footer
-        titles = [.pulling:"上拉加载更多", .pullingComplate:"松开加载", .refreshing:"加载中...", .end:"完成"]
     }
 }
 

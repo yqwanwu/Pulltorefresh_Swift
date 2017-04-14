@@ -89,6 +89,7 @@ class PullToRefreshControl: NSObject {
                     if state == .refreshing {
                         if header?.state == .pullingComplate {
                             header?.state = state
+                            footer?.state = .wait
                         }
                     } else {
                         header?.state = state
@@ -96,7 +97,7 @@ class PullToRefreshControl: NSObject {
                 }
                 
                 let visiableHeight_footer = scrollView.contentOffset.y + scrollView.frame.height - scrollView.contentInset.bottom - scrollView.contentSize.height
-                if visiableHeight_footer > 0 && state != footer?.state && footer?.state != .refreshing {
+                if visiableHeight_footer > 0 && state != footer?.state && footer?.state != .refreshing && footer?.state != .noMoreData {
                     if state == .refreshing {
                         if footer?.state == .pullingComplate {
                             footer?.state = state
@@ -133,7 +134,10 @@ class PullToRefreshControl: NSObject {
                                     footer.progress = p
                                 }
                                 footer.isHidden = footer.hideWhenComplete && p <= 0
-                                footer.state = footer.progress >= 1 ? .pullingComplate : .pulling
+                                
+                                if footer.state != .noMoreData {
+                                    footer.state = footer.progress >= 1 ? .pullingComplate : .pulling
+                                }
                             }
                         }
                     }
