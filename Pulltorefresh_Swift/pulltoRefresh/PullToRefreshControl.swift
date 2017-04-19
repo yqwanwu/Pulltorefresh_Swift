@@ -43,9 +43,10 @@ class PullToRefreshControl: NSObject {
         let gifHeader = PullToRefreshDefaultGifHeader(frame: CGRect(x: 0, y: -80, width: scrollView.frame.width, height: 80), scrollView: scrollView)
         header = gifHeader
         scrollView.insertSubview(header!, at: 0)
-        gifHeader.gifFrame = CGRect(x: 40, y: 20, width: 100, height: 60)
         
         config(gifHeader)
+        
+        gifHeader.gifFrame = CGRect(x: 40, y: 20, width: 100, height: 60)
         
         return self
     }
@@ -53,12 +54,14 @@ class PullToRefreshControl: NSObject {
     @discardableResult
     func addGifFooter(config: (_ footer: PullToRefreshDefaultGifFooter) -> Void) -> Self {
         let y = scrollView.contentSize.height + scrollView.contentInset.bottom
-        let gifFooter = PullToRefreshDefaultGifFooter(frame: CGRect(x: 0, y: y, width: scrollView.frame.width, height: 80), scrollView: scrollView)
+        let gifFooter = PullToRefreshDefaultGifFooter(frame: CGRect(x: 0, y: y, width: scrollView.frame.width, height: 60), scrollView: scrollView)
         footer = gifFooter
+        footer?.margin = 0
         scrollView.insertSubview(gifFooter, at: 0)
-        gifFooter.gifFrame = CGRect(x: 40, y: 20, width: 100, height: 60)
         
         config(gifFooter)
+        
+        gifFooter.gifFrame = CGRect(x: 40, y: gifFooter.margin, width: 100, height: 60)
         
         return self
     }
@@ -110,36 +113,57 @@ class PullToRefreshControl: NSObject {
         } else if keyPath == "contentOffset" {
             if let point = change?[.newKey] as? CGPoint {
                 if let header = header {
+                    var p: CGFloat = 0.0
+                    
                     let visiableHeight = -point.y - scrollView.contentInset.top
                     if visiableHeight > 0 && header.state != .refreshing {
                         /// - header.margin - marginDely 防止进度增加过快，进度条还没显示就已经跑了一半的进度，，很尴尬。。。
-                        let p = min(1.0, (abs(visiableHeight) - header.margin - header.marginDely) / header.refreshHeight)
-                        if p >= 0 {
+                        if abs(visiableHeight) < header.margin + header.marginDely {
+                            p = 0.001
                             header.progress = p
+                        } else {
+                            p = min(1.0, (abs(visiableHeight) - header.margin - header.marginDely) / header.refreshHeight)
+                            if p >= 0 {
+                                header.progress = p
+                            }
                         }
-                        header.isHidden = header.hideWhenComplete && p <= 0
+                        
                         header.state = header.progress >= 1 ? .pullingComplate : .pulling
+                        header.isHidden = header.hideWhenComplete && p <= 0
                     }
+                }
+                
+                if let footer = footer {
+                    let visiableHeight = point.y + scrollView.frame.height - scrollView.contentInset.bottom - scrollView.contentSize.height
                     
-                    if let footer = footer {
-                        let visiableHeight = point.y + scrollView.frame.height - scrollView.contentInset.bottom - scrollView.contentSize.height
-                        if visiableHeight > 0 && footer.state != .refreshing && scrollView.contentSize.height > 0 {
-                            /// - header.margin - marginDely 防止进度增加过快，
-                            if footer.autoLoadWhenIsBottom && scrollView.contentSize.height > 0 {
-                                footer.isHidden = false
-                                footer.beginRefresh()
+                    var p: CGFloat = 0.0
+                    
+                    if visiableHeight > 0 && footer.state != .refreshing && scrollView.contentSize.height > 0 {
+                        /// - header.margin - marginDely 防止进度增加过快，
+                        if footer.autoLoadWhenIsBottom && scrollView.contentSize.height > 0 {
+                            footer.isHidden = false
+                            footer.beginRefresh()
+                        } else {
+                            if abs(visiableHeight) < footer.margin + footer.marginDely {
+                                p = 0.001
+                                footer.progress = p
                             } else {
-                                let p = min(1.0, (abs(visiableHeight) - footer.margin - footer.marginDely) / footer.refreshHeight)
+                                p = min(1.0, (abs(visiableHeight) - footer.margin - footer.marginDely) / footer.refreshHeight)
                                 if p >= 0 {
                                     footer.progress = p
                                 }
-                                footer.isHidden = footer.hideWhenComplete && p <= 0
-                                
-                                if footer.state != .noMoreData {
-                                    footer.state = footer.progress >= 1 ? .pullingComplate : .pulling
-                                }
+                            }
+                            
+                            if footer.state != .noMoreData {
+                                footer.state = footer.progress >= 1 ? .pullingComplate : .pulling
                             }
                         }
+                        
+                        footer.isHidden = footer.hideWhenComplete && p <= 0
+                    }
+                    
+                    if footer.state == .noMoreData || footer.state == .refreshing {
+                        footer.isHidden = false
                     }
                 }
             }

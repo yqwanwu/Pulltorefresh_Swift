@@ -39,7 +39,8 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
     
     ///头部距离下边 或 底部距离上边的距离
     var margin: CGFloat = 10
-    var marginDely: CGFloat = 15
+    
+    var marginDely: CGFloat = 10
     
     var type = PullToRefreshType.header {
         didSet {
@@ -189,7 +190,7 @@ class PullToRefreshDefaultHeader: PullToRefreshView {
     
     override var progress: CGFloat {
         didSet {
-            animationForPullinf()
+            animationForPulling()
         }
     }
     
@@ -204,7 +205,7 @@ class PullToRefreshDefaultHeader: PullToRefreshView {
         progressView.center = CGPoint(x: ratio * frame.width - progressViewWidth / 2, y: centerY)
     }
     
-    func animationForPullinf() {
+    func animationForPulling() {
         progressView.progress = Double(self.progress)
     }
   
@@ -247,7 +248,7 @@ class PullToRefreshDefaultFooter: PullToRefreshDefaultHeader {
         self.addSubview(progressView)
         
         self.type = .footer
-        titles = [.pulling:"上拉加载更多", .pullingComplate:"松开加载", .refreshing:"加载中...", .end:"完成"]
+        titles = [.pulling:"上拉加载更多", .pullingComplate:"松开加载", .refreshing:"加载中...", .end:"完成", .noMoreData:"没有更多数据"]
     }
 }
 
@@ -336,14 +337,6 @@ class PullToRefreshDefaultGifHeader: PullToRefreshDefaultHeader {
         }
     }
     
-    override func endRefresh(completion: (() -> Void)?) {
-        super.endRefresh()
-        self.progressView.isHidden = false
-        self.activityIndicator.stopAnimating()
-        
-        self.gifView.load(Data(), mimeType: "", characterEncodingName: "", baseURL: URL(fileURLWithPath: ""))
-    }
-    
     /** 不设置time，就根据 progress 进度做动画，一般用于 拉动过程 */
     @discardableResult
     func setImgArr(state: PullToRefreshState, imgs: [UIImage], animationTime: Double? = nil) -> Self {
@@ -403,6 +396,11 @@ class PullToRefreshDefaultGifFooter: PullToRefreshDefaultGifHeader {
         gifImgArrView.clipsToBounds = true
         
         self.type = .footer
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.titleLabel.frame.origin.y = 0
     }
 }
 
