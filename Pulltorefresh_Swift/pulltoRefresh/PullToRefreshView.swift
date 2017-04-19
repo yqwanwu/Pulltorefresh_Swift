@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import WebKit
 
 
 enum PullToRefreshState: Int {
@@ -38,6 +39,8 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
     
     ///头部距离下边 或 底部距离上边的距离
     var margin: CGFloat = 10
+    var marginDely: CGFloat = 15
+    
     var type = PullToRefreshType.header {
         didSet {
             if type == .footer {
@@ -214,10 +217,9 @@ class PullToRefreshDefaultHeader: PullToRefreshView {
     }
     
     override func endRefresh(completion: (() -> Void)? = nil) {
-        super.endRefresh(completion: {
-            self.progressView.isHidden = false
-            self.activityIndicator.stopAnimating()
-        })
+        super.endRefresh()
+        self.progressView.isHidden = false
+        self.activityIndicator.stopAnimating()
         self.activityIndicator.isHidden = true
     }
 }
@@ -270,7 +272,7 @@ class PullToRefreshGifItem: NSObject {
 
 class PullToRefreshDefaultGifHeader: PullToRefreshDefaultHeader {
     fileprivate let gifImgArrView = UIImageView()
-    fileprivate let gifView = UIWebView()
+    fileprivate let gifView = WKWebView()
     
     fileprivate var gifItem = [PullToRefreshState:PullToRefreshGifItem]()
     
@@ -305,7 +307,7 @@ class PullToRefreshDefaultGifHeader: PullToRefreshDefaultHeader {
         
         if item.isGif {
             if let gifData = gifItem[state]?.gifData {
-                gifView.load(gifData, mimeType: "image/gif", textEncodingName: "UTF-8", baseURL: URL(fileURLWithPath: ""))
+                gifView.load(gifData, mimeType: "image/gif", characterEncodingName: "UTF-8", baseURL: URL(fileURLWithPath: ""))
             }
             gifImgArrView.stopAnimating()
         } else {
@@ -334,6 +336,14 @@ class PullToRefreshDefaultGifHeader: PullToRefreshDefaultHeader {
         }
     }
     
+    override func endRefresh(completion: (() -> Void)?) {
+        super.endRefresh()
+        self.progressView.isHidden = false
+        self.activityIndicator.stopAnimating()
+        
+        self.gifView.load(Data(), mimeType: "", characterEncodingName: "", baseURL: URL(fileURLWithPath: ""))
+    }
+    
     /** 不设置time，就根据 progress 进度做动画，一般用于 拉动过程 */
     @discardableResult
     func setImgArr(state: PullToRefreshState, imgs: [UIImage], animationTime: Double? = nil) -> Self {
@@ -344,7 +354,7 @@ class PullToRefreshDefaultGifHeader: PullToRefreshDefaultHeader {
     @discardableResult
     func setGifData(state: PullToRefreshState, gifData: Data) -> Self {
         gifItem[state] = PullToRefreshGifItem(gifData: gifData)
-        gifView.load(gifData, mimeType: "image/gif", textEncodingName: "UTF-8", baseURL: URL(fileURLWithPath: ""))
+        
         return self
     }
     
@@ -358,7 +368,7 @@ class PullToRefreshDefaultGifHeader: PullToRefreshDefaultHeader {
         self.addSubview(titleLabel)
         self.addSubview(gifImgArrView)
         self.addSubview(gifView)
-        gifView.scalesPageToFit = true
+        gifView.sizeToFit()
         gifImgArrView.contentMode = .scaleAspectFill
         gifImgArrView.clipsToBounds = true
     }
@@ -388,7 +398,7 @@ class PullToRefreshDefaultGifFooter: PullToRefreshDefaultGifHeader {
         self.addSubview(titleLabel)
         self.addSubview(gifImgArrView)
         self.addSubview(gifView)
-        gifView.scalesPageToFit = true
+        gifView.sizeToFit()
         gifImgArrView.contentMode = .scaleAspectFill
         gifImgArrView.clipsToBounds = true
         

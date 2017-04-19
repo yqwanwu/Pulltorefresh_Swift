@@ -22,19 +22,16 @@ class CustomTableViewController: UITableViewController {
         
         p = PullToRefreshControl(scrollView: tableView).addGifHeader(config: { (gifHeader) in
             gifHeader.gifFrame = CGRect(x: 40, y: 20, width: 100, height: 60)
-            
             var imgArr = [UIImage]()
             for i in 1...8 {
                 imgArr.append(UIImage(named: "timg\(i)")!)
             }
             gifHeader.setImgArr(state: .pulling, imgs: imgArr)
-            
             gifHeader.setImgArr(state: .refreshing, imgs: imgArr, animationTime: 2.0)
         }).addGifFooter(config: { (gifFooter) in
             let url = Bundle.main.url(forResource: "luufy", withExtension: "gif")
             let data = try! Data(contentsOf: url!)
             gifFooter.setGifData(state: .pulling, gifData: data)
-            
             let url1 = Bundle.main.url(forResource: "timg", withExtension: "gif")
             let data1 = try! Data(contentsOf: url1!)
             gifFooter.setGifData(state: .refreshing, gifData: data1)

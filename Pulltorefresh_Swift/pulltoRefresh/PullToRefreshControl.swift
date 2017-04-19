@@ -112,8 +112,8 @@ class PullToRefreshControl: NSObject {
                 if let header = header {
                     let visiableHeight = -point.y - scrollView.contentInset.top
                     if visiableHeight > 0 && header.state != .refreshing {
-                        /// - header.margin - 5 防止进度增加过快，进度条还没显示就已经跑了一半的进度，，很尴尬。。。
-                        let p = min(1.0, (abs(visiableHeight) - header.margin - 5) / header.refreshHeight)
+                        /// - header.margin - marginDely 防止进度增加过快，进度条还没显示就已经跑了一半的进度，，很尴尬。。。
+                        let p = min(1.0, (abs(visiableHeight) - header.margin - header.marginDely) / header.refreshHeight)
                         if p >= 0 {
                             header.progress = p
                         }
@@ -124,12 +124,12 @@ class PullToRefreshControl: NSObject {
                     if let footer = footer {
                         let visiableHeight = point.y + scrollView.frame.height - scrollView.contentInset.bottom - scrollView.contentSize.height
                         if visiableHeight > 0 && footer.state != .refreshing && scrollView.contentSize.height > 0 {
-                            /// - header.margin - 5 防止进度增加过快，
+                            /// - header.margin - marginDely 防止进度增加过快，
                             if footer.autoLoadWhenIsBottom && scrollView.contentSize.height > 0 {
                                 footer.isHidden = false
                                 footer.beginRefresh()
                             } else {
-                                let p = min(1.0, (abs(visiableHeight) - footer.margin - 5) / footer.refreshHeight)
+                                let p = min(1.0, (abs(visiableHeight) - footer.margin - footer.marginDely) / footer.refreshHeight)
                                 if p >= 0 {
                                     footer.progress = p
                                 }
