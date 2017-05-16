@@ -308,7 +308,14 @@ class PullToRefreshDefaultGifHeader: PullToRefreshDefaultHeader {
         
         if item.isGif {
             if let gifData = gifItem[state]?.gifData {
-                gifView.load(gifData, mimeType: "image/gif", characterEncodingName: "UTF-8", baseURL: URL(fileURLWithPath: ""))
+                
+                if #available(iOS 9.0, *) {
+                    gifView.load(gifData, mimeType: "image/gif", characterEncodingName: "UTF-8", baseURL: URL(fileURLWithPath: ""))
+                } else {
+                    //为了支持ios8，改为base64
+                    let base64 = "<img src=\"data:image/gif;base64," + gifData.base64EncodedString() + "\"/>"
+                    gifView.loadHTMLString(base64, baseURL: URL(fileURLWithPath: ""))
+                }
             }
             gifImgArrView.stopAnimating()
         } else {
