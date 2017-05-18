@@ -8,11 +8,11 @@
 
 import UIKit
 
-class PullToRefreshControl: NSObject {    
+class PullToRefreshControl: NSObject {
     var header: PullToRefreshView?
     var footer: PullToRefreshView?
     var scrollView: UIScrollView!
-        
+    
     convenience init(scrollView: UIScrollView) {
         self.init()
         self.scrollView = scrollView
@@ -70,6 +70,7 @@ class PullToRefreshControl: NSObject {
         scrollView.addObserver(self, forKeyPath: "panGestureRecognizer.state", options: .new, context: nil)
         scrollView?.addObserver(self, forKeyPath: "contentOffset", options: .new, context: nil)
         scrollView?.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
+        scrollView?.addObserver(self, forKeyPath: "bounds", options: .new, context: nil)
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -112,7 +113,7 @@ class PullToRefreshControl: NSObject {
             }
         } else if keyPath == "contentOffset" {
             if let point = change?[.newKey] as? CGPoint {
-                if let header = header, header.state != .refreshing {
+                if let header = header {
                     var p: CGFloat = 0.0
                     
                     let visiableHeight = -point.y - scrollView.contentInset.top
@@ -133,7 +134,7 @@ class PullToRefreshControl: NSObject {
                     }
                 }
                 
-                if let footer = footer, footer.state != .refreshing {
+                if let footer = footer {
                     let visiableHeight = point.y + scrollView.frame.height - scrollView.contentInset.bottom - maxHeight()
                     
                     var p: CGFloat = 0.0
@@ -172,6 +173,13 @@ class PullToRefreshControl: NSObject {
             
             let y = maxHeight() + footer.originalBottom
             footer.frame.origin.y = y
+        } else if keyPath == "bounds" {
+            if let b = change?[.newKey] as? CGRect {
+                header?.bounds.size.width = b.size.width
+                header?.frame.origin.x = 0
+                footer?.bounds.size.width = b.width
+                footer?.frame.origin.x = 0
+            }
         }
         
     }
@@ -184,6 +192,7 @@ class PullToRefreshControl: NSObject {
         scrollView?.removeObserver(self, forKeyPath: "panGestureRecognizer.state")
         scrollView?.removeObserver(self, forKeyPath: "contentOffset")
         scrollView?.removeObserver(self, forKeyPath: "contentSize")
+        scrollView?.removeObserver(self, forKeyPath: "bounds")
     }
-
+    
 }
