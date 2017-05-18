@@ -21,6 +21,7 @@
 		96195FA41E9F6A0E008ACB33 /* luufy.gif in Resources */ = {isa = PBXBuildFile; fileRef = 96195FA31E9F6A0E008ACB33 /* luufy.gif */; };
 		96195FA81EA0B1B0008ACB33 /* default.gif in Resources */ = {isa = PBXBuildFile; fileRef = 96195FA71EA0B1B0008ACB33 /* default.gif */; };
 		96195FAA1EA0B2B6008ACB33 /* gif.gif in Resources */ = {isa = PBXBuildFile; fileRef = 96195FA91EA0B2B6008ACB33 /* gif.gif */; };
+		96F12F9E1ECDD9CA004E42FA /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F12F9D1ECDD9CA004E42FA /* TestViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		96195FA31E9F6A0E008ACB33 /* luufy.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = luufy.gif; sourceTree = "<group>"; };
 		96195FA71EA0B1B0008ACB33 /* default.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = default.gif; sourceTree = "<group>"; };
 		96195FA91EA0B2B6008ACB33 /* gif.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = gif.gif; sourceTree = "<group>"; };
+		96F12F9D1ECDD9CA004E42FA /* TestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 				96195F821E9E1F80008ACB33 /* AppDelegate.swift */,
 				96195F841E9E1F80008ACB33 /* ViewController.swift */,
 				96195F9D1E9E1FF2008ACB33 /* CustomTableViewController.swift */,
+				96F12F9D1ECDD9CA004E42FA /* TestViewController.swift */,
 				96195F941E9E1F9A008ACB33 /* pulltoRefresh */,
 				96195F861E9E1F80008ACB33 /* Main.storyboard */,
 				96195FA31E9F6A0E008ACB33 /* luufy.gif */,
@@ -178,6 +181,7 @@
 			files = (
 				96195F851E9E1F80008ACB33 /* ViewController.swift in Sources */,
 				96195F9A1E9E1FA4008ACB33 /* CircleProgressView.swift in Sources */,
+				96F12F9E1ECDD9CA004E42FA /* TestViewController.swift in Sources */,
 				96195F831E9E1F80008ACB33 /* AppDelegate.swift in Sources */,
 				96195F9C1E9E1FA4008ACB33 /* PullToRefreshControl.swift in Sources */,
 				96195F991E9E1FA4008ACB33 /* TimerExtension.swift in Sources */,

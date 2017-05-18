@@ -112,7 +112,7 @@ class PullToRefreshControl: NSObject {
             }
         } else if keyPath == "contentOffset" {
             if let point = change?[.newKey] as? CGPoint {
-                if let header = header {
+                if let header = header, header.state != .refreshing {
                     var p: CGFloat = 0.0
                     
                     let visiableHeight = -point.y - scrollView.contentInset.top
@@ -133,7 +133,7 @@ class PullToRefreshControl: NSObject {
                     }
                 }
                 
-                if let footer = footer {
+                if let footer = footer, footer.state != .refreshing {
                     let visiableHeight = point.y + scrollView.frame.height - scrollView.contentInset.bottom - maxHeight()
                     
                     var p: CGFloat = 0.0

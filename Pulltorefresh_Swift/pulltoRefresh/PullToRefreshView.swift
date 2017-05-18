@@ -107,7 +107,11 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
         if type == .header {
             scrollView.contentInset.top = refreshHeight + originalTop
         } else {
-            scrollView.contentInset.bottom = refreshHeight + originalBottom
+            var blank: CGFloat = 0.0
+            if scrollView.contentSize.height < scrollView.frame.height {
+                blank = scrollView.frame.height - scrollView.contentSize.height
+            }
+            scrollView.contentInset.bottom = refreshHeight + originalBottom + blank
         }
     }
     
@@ -134,7 +138,12 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
             if self.type == .header {
                 self.scrollView.contentOffset.y = -(self.refreshHeight + self.originalTop)
             } else {
-                self.scrollView.contentOffset.y = max(self.scrollView.contentSize.height, self.scrollView.frame.height) + self.scrollView.contentInset.bottom + self.refreshHeight - self.scrollView.contentInset.top - self.scrollView.frame.height
+                if self.scrollView.contentSize.height < self.scrollView.frame.height {
+                    self.scrollView.contentOffset.y = self.refreshHeight
+                } else {
+                    self.scrollView.contentOffset.y = max(self.scrollView.contentSize.height, self.scrollView.frame.height) + self.scrollView.contentInset.bottom + self.refreshHeight - self.scrollView.contentInset.top - self.scrollView.frame.height
+                }
+                
             }
         }, completion: { (f) in
             
