@@ -16,7 +16,6 @@ class CustomTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.contentInset.bottom = 64
         p = PullToRefreshControl(scrollView: tableView).addDefaultHeader(config: { (header) in
             header.titleLabel.textColor = UIColor.red
         }).addDefaultFooter()
