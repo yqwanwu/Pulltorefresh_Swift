@@ -16,33 +16,34 @@ class CustomTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        p = PullToRefreshControl(scrollView: tableView).addDefaultHeader(config: { (header) in
-//            header.titleLabel.textColor = UIColor.red
-//        }).addDefaultFooter()
+        tableView.contentInset.bottom = 64
+        p = PullToRefreshControl(scrollView: tableView).addDefaultHeader(config: { (header) in
+            header.titleLabel.textColor = UIColor.red
+        }).addDefaultFooter()
         
-        p = PullToRefreshControl(scrollView: tableView).addGifHeader(config: { (gifHeader) in
-            gifHeader.gifFrame = CGRect(x: 40, y: 20, width: 100, height: 60)
-            var imgArr = [UIImage]()
-            for i in 1...8 {
-                imgArr.append(UIImage(named: "timg\(i)")!)
-            }
-            gifHeader.setImgArr(state: .pulling, imgs: imgArr)
-            gifHeader.setImgArr(state: .refreshing, imgs: imgArr, animationTime: 2.0)
-        }).addGifFooter(config: { (gifFooter) in
-            let url = Bundle.main.url(forResource: "luufy", withExtension: "gif")
-            let data = try! Data(contentsOf: url!)
-            gifFooter.setGifData(state: .pulling, gifData: data)
-            let url1 = Bundle.main.url(forResource: "timg", withExtension: "gif")
-            let data1 = try! Data(contentsOf: url1!)
-            gifFooter.setGifData(state: .refreshing, gifData: data1)
-            
-        })
+//        p = PullToRefreshControl(scrollView: tableView).addGifHeader(config: { (gifHeader) in
+//            gifHeader.gifFrame = CGRect(x: 40, y: 20, width: 100, height: 60)
+//            var imgArr = [UIImage]()
+//            for i in 1...8 {
+//                imgArr.append(UIImage(named: "timg\(i)")!)
+//            }
+//            gifHeader.setImgArr(state: .pulling, imgs: imgArr)
+//            gifHeader.setImgArr(state: .refreshing, imgs: imgArr, animationTime: 2.0)
+//        }).addGifFooter(config: { (gifFooter) in
+//            let url = Bundle.main.url(forResource: "luufy", withExtension: "gif")
+//            let data = try! Data(contentsOf: url!)
+//            gifFooter.setGifData(state: .pulling, gifData: data)
+//            let url1 = Bundle.main.url(forResource: "timg", withExtension: "gif")
+//            let data1 = try! Data(contentsOf: url1!)
+//            gifFooter.setGifData(state: .refreshing, gifData: data1)
+//            
+//        })
         
         p.header?.addAction(with: .refreshing, action: { [unowned self] _ in
             //模拟数据请求
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3, execute: {
                 self.p.header?.endRefresh()
-                self.counter = 20
+                self.counter = 2
                 self.tableView.reloadData()
             })
         }).addAction(with: .end, action: { 
@@ -75,7 +76,7 @@ class CustomTableViewController: UITableViewController {
     @IBAction func ac_up(_ sender: Any) {
         p.footer?.beginRefresh()
     }
-    var counter = 20
+    var counter = 2
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         counter += 5

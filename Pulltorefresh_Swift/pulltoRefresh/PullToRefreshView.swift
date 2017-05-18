@@ -134,7 +134,7 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
             if self.type == .header {
                 self.scrollView.contentOffset.y = -(self.refreshHeight + self.originalTop)
             } else {
-                self.scrollView.contentOffset.y  = self.scrollView.contentSize.height + self.scrollView.contentInset.bottom + self.refreshHeight - self.scrollView.contentInset.top - self.scrollView.frame.height
+                self.scrollView.contentOffset.y = max(self.scrollView.contentSize.height, self.scrollView.frame.height) + self.scrollView.contentInset.bottom + self.refreshHeight - self.scrollView.contentInset.top - self.scrollView.frame.height
             }
         }, completion: { (f) in
             
@@ -142,7 +142,7 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
     }
     
     deinit {
-        print(" 刷新视图死了 ")
+        debugPrint(" 刷新视图死了 ")
     }
 }
 

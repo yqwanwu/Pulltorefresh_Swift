@@ -22,7 +22,7 @@ class PullToRefreshControl: NSObject {
     
     @discardableResult
     func addDefaultFooter(config: ((_ footer: PullToRefreshDefaultFooter) -> Void)? = nil) -> Self {
-        let y = scrollView.contentSize.height + scrollView.contentInset.bottom
+        let y = maxHeight() + scrollView.contentInset.bottom
         footer = PullToRefreshDefaultFooter(frame: CGRect(x: 0, y: y, width: scrollView.frame.width, height: 50), scrollView: scrollView)
         scrollView.insertSubview(footer!, at: 1)
         config?(footer as! PullToRefreshDefaultFooter)
@@ -53,7 +53,7 @@ class PullToRefreshControl: NSObject {
     
     @discardableResult
     func addGifFooter(config: (_ footer: PullToRefreshDefaultGifFooter) -> Void) -> Self {
-        let y = scrollView.contentSize.height + scrollView.contentInset.bottom
+        let y = maxHeight() + scrollView.contentInset.bottom
         let gifFooter = PullToRefreshDefaultGifFooter(frame: CGRect(x: 0, y: y, width: scrollView.frame.width, height: 60), scrollView: scrollView)
         footer = gifFooter
         footer?.margin = 0
@@ -99,7 +99,7 @@ class PullToRefreshControl: NSObject {
                     }
                 }
                 
-                let visiableHeight_footer = scrollView.contentOffset.y + scrollView.frame.height - scrollView.contentInset.bottom - scrollView.contentSize.height
+                let visiableHeight_footer = scrollView.contentOffset.y + scrollView.frame.height - scrollView.contentInset.bottom - maxHeight()
                 if visiableHeight_footer > 0 && state != footer?.state && footer?.state != .refreshing && footer?.state != .noMoreData {
                     if state == .refreshing {
                         if footer?.state == .pullingComplate {
@@ -134,7 +134,7 @@ class PullToRefreshControl: NSObject {
                 }
                 
                 if let footer = footer {
-                    let visiableHeight = point.y + scrollView.frame.height - scrollView.contentInset.bottom - scrollView.contentSize.height
+                    let visiableHeight = point.y + scrollView.frame.height - scrollView.contentInset.bottom - maxHeight()
                     
                     var p: CGFloat = 0.0
                     
@@ -170,10 +170,14 @@ class PullToRefreshControl: NSObject {
         } else if keyPath == "contentSize" {
             guard let footer = footer else { return }
             
-            let y = scrollView.contentSize.height + footer.originalBottom
+            let y = maxHeight() + footer.originalBottom
             footer.frame.origin.y = y
         }
         
+    }
+    
+    func maxHeight() -> CGFloat {
+        return max(scrollView.contentSize.height, scrollView.frame.height)
     }
     
     deinit {
