@@ -44,7 +44,7 @@ class TestViewController: UIViewController, UITableViewDataSource {
     }
 
     @IBAction func ac_test(_ sender: Any) {
-        self.p.footer?.beginRefresh()
+        self.p.header?.beginRefresh()
     }
     
     
