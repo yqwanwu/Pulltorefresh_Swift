@@ -16,7 +16,7 @@ class TestViewController: UIViewController, UITableViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 100, right: 50)
+        self.tableView.contentInset = UIEdgeInsets(top: 100, left: 0, bottom: 500, right: 50)
         
         tableView.dataSource = self
         p = PullToRefreshControl(scrollView: tableView).addDefaultHeader(config: { (header) in
@@ -24,7 +24,7 @@ class TestViewController: UIViewController, UITableViewDataSource {
         }).addDefaultFooter()
         p.footer?.autoLoadWhenIsBottom = false
         
-        p.header?.addAction(with: .refreshing, action: { [weak self] _ in
+        p.header?.addAction(with: .refreshing, action: { [weak self] in
             //模拟数据请求
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3, execute: {
                 self?.p.header?.endRefresh()
@@ -33,7 +33,7 @@ class TestViewController: UIViewController, UITableViewDataSource {
             print("那啥 结束了都")
         })
         
-        p.footer?.addAction(with: .refreshing, action: { [unowned self] _ in
+        p.footer?.addAction(with: .refreshing, action: { [unowned self] in
             //模拟数据请求
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3, execute: {
                 self.p.footer?.endRefresh()
@@ -47,6 +47,9 @@ class TestViewController: UIViewController, UITableViewDataSource {
         self.p.header?.beginRefresh()
     }
     
+    @IBAction func ac_test1(_ sender: Any) {
+        self.p.footer?.beginRefresh()
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 2

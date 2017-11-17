@@ -61,6 +61,9 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
                 case .refreshing:
                     whenRefreshing()
                     self.isHidden = false
+                case .begin:
+                    self.originalTop = self.scrollView.contentInset.top
+                    self.originalBottom = self.scrollView.contentInset.bottom
                 default:
                     break
                 }
@@ -103,6 +106,7 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
         return self
     }
     
+    ///刷新中
     func whenRefreshing() {
         if type == .header {
             scrollView.contentInset.top = refreshHeight + originalTop
@@ -130,6 +134,8 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
     }
     
     func beginRefresh() {
+        self.originalTop = self.scrollView.contentInset.top
+        self.originalBottom = self.scrollView.contentInset.bottom
         if state == .noMoreData {
             return
         }
@@ -137,14 +143,13 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
         
         UIView.animate(withDuration: 0.6, animations: {
             if self.type == .header {
-                self.scrollView.contentOffset.y = -(self.refreshHeight + self.originalTop)
+                self.scrollView.contentOffset.y = -(self.refreshHeight + self.originalTop) //- self.scrollView.contentInset.top
             } else {
                 if self.scrollView.contentSize.height < self.scrollView.frame.height {
-                    self.scrollView.contentOffset.y = self.refreshHeight
+                    self.scrollView.contentOffset.y = self.refreshHeight + self.originalBottom
                 } else {
-                    self.scrollView.contentOffset.y = max(self.scrollView.contentSize.height, self.scrollView.frame.height) + self.scrollView.contentInset.bottom + self.refreshHeight - self.scrollView.contentInset.top - self.scrollView.frame.height
+                    self.scrollView.contentOffset.y = max(self.scrollView.contentSize.height, self.scrollView.frame.height) + self.originalBottom + self.refreshHeight - self.scrollView.contentInset.top - self.scrollView.frame.height
                 }
-                
             }
         }, completion: { (f) in
             

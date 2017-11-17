@@ -31,7 +31,8 @@ class PullToRefreshControl: NSObject {
     
     @discardableResult
     func addDefaultHeader(config: ((_ header: PullToRefreshDefaultHeader) -> Void)? = nil) -> Self {
-        header = PullToRefreshDefaultHeader(frame: CGRect(x: 0, y: -60, width: scrollView.frame.width, height: 60), scrollView: scrollView)
+        let y = -scrollView.contentInset.top - 60
+        header = PullToRefreshDefaultHeader(frame: CGRect(x: 0, y: y, width: scrollView.frame.width, height: 60), scrollView: scrollView)
         scrollView.insertSubview(header!, at: 0)
         
         config?(header as! PullToRefreshDefaultHeader)
@@ -40,7 +41,8 @@ class PullToRefreshControl: NSObject {
     
     @discardableResult
     func addGifHeader(config: (_ header: PullToRefreshDefaultGifHeader) -> Void) -> Self {
-        let gifHeader = PullToRefreshDefaultGifHeader(frame: CGRect(x: 0, y: -80, width: scrollView.frame.width, height: 80), scrollView: scrollView)
+        let y = -scrollView.contentInset.top - 80
+        let gifHeader = PullToRefreshDefaultGifHeader(frame: CGRect(x: 0, y: y, width: scrollView.frame.width, height: 80), scrollView: scrollView)
         header = gifHeader
         scrollView.insertSubview(header!, at: 0)
         
