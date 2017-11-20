@@ -8,6 +8,9 @@
 
 import UIKit
 
+/**
+ *  header和footer只可以添加一个，后面的覆盖前面的
+ */
 class PullToRefreshControl: NSObject {
     var header: PullToRefreshView?
     var footer: PullToRefreshView?
@@ -20,6 +23,28 @@ class PullToRefreshControl: NSObject {
         setup()
     }
     
+    //MARK: 横向
+    @discardableResult
+    func addDefaultHorizontalHeader(config: ((_ header: PullToRefreshDefaultHorizontalHeader) -> Void)? = nil) -> Self {
+        let x = -scrollView.contentInset.left - 40
+        header = PullToRefreshDefaultHorizontalHeader(frame: CGRect(x: x, y: 0, width: 40, height: scrollView.frame.height), scrollView: scrollView)
+        scrollView.insertSubview(header!, at: 0)
+        config?(header as! PullToRefreshDefaultHorizontalHeader)
+        return self
+    }
+    
+    @discardableResult
+    func addDefaultHorizontalFooter(config: ((_ footer: PullToRefreshDefaultHorizontalFooter) -> Void)? = nil) -> Self {
+        let width = max(scrollView.contentSize.width, scrollView.frame.width)
+        let x = width + scrollView.contentInset.right
+        footer = PullToRefreshDefaultHorizontalFooter(frame: CGRect(x: x, y: 0, width: 40, height: scrollView.frame.height), scrollView: scrollView)
+        scrollView.insertSubview(footer!, at: 1)
+        config?(footer as! PullToRefreshDefaultHorizontalFooter)
+        return self
+    }
+    
+    
+    //MARK: 纵向
     @discardableResult
     func addDefaultFooter(config: ((_ footer: PullToRefreshDefaultFooter) -> Void)? = nil) -> Self {
         let y = maxHeight() + scrollView.contentInset.bottom
@@ -90,26 +115,49 @@ class PullToRefreshControl: NSObject {
                     break
                 }
                 
-                let visiableHeight_header = -scrollView.contentOffset.y - scrollView.contentInset.top
-                if visiableHeight_header > 0 && state != header?.state && header?.state != .refreshing {
-                    if state == .refreshing {
-                        if header?.state == .pullingComplate {
+                var visiableHeight_header: CGFloat = 0
+                if let _ = header as? PullToRefreshHorizontalView {
+                    visiableHeight_header = -scrollView.contentOffset.x - scrollView.contentInset.left
+                } else {
+                    visiableHeight_header = -scrollView.contentOffset.y - scrollView.contentInset.top
+                }
+                if visiableHeight_header > 0 {
+                    if state != header?.state && header?.state != .refreshing {
+                        if state == .refreshing {
+                            if header?.state == .pullingComplate {
+                                self.footer?.endRefresh()
+                                header?.state = state
+                                footer?.state = .wait
+                            }
+                        } else {
                             header?.state = state
-                            footer?.state = .wait
                         }
-                    } else {
-                        header?.state = state
+                    }
+                } else {
+                    if state == .begin && header?.state != .refreshing {
+                        header?.state = .begin
                     }
                 }
                 
-                let visiableHeight_footer = scrollView.contentOffset.y + scrollView.frame.height - scrollView.contentInset.bottom - maxHeight()
+                var visiableHeight_footer: CGFloat = 0
+                if let _ = footer as? PullToRefreshHorizontalView {
+                    let maxWidth = max(scrollView.contentSize.width, scrollView.frame.width)
+                    visiableHeight_footer = scrollView.contentOffset.x + scrollView.frame.width - scrollView.contentInset.right - maxWidth
+                } else {
+                    visiableHeight_footer = scrollView.contentOffset.y + scrollView.frame.height - scrollView.contentInset.bottom - maxHeight()
+                }
                 if visiableHeight_footer > 0 && state != footer?.state && footer?.state != .refreshing && footer?.state != .noMoreData {
                     if state == .refreshing {
                         if footer?.state == .pullingComplate {
+                            self.header?.endRefresh()
                             footer?.state = state
                         }
                     } else {
                         footer?.state = state
+                    }
+                } else {
+                    if state == .begin && footer?.state != .noMoreData && footer?.state != .refreshing {
+                        footer?.state = .begin
                     }
                 }
             }
@@ -118,7 +166,13 @@ class PullToRefreshControl: NSObject {
                 if let header = header {
                     var p: CGFloat = 0.0
                     
-                    let visiableHeight = -point.y - scrollView.contentInset.top
+                    var visiableHeight: CGFloat = 0
+                    //判断横向还是纵向
+                    if let _ = header as? PullToRefreshHorizontalView {
+                        visiableHeight = (-point.x - scrollView.contentInset.left)
+                    } else {
+                         visiableHeight = -point.y - scrollView.contentInset.top
+                    }
                     if visiableHeight > 0 && header.state != .refreshing {
                         /// - header.margin - marginDely 防止进度增加过快，进度条还没显示就已经跑了一半的进度，，很尴尬。。。
                         if abs(visiableHeight) < header.margin + header.marginDely {
@@ -137,7 +191,14 @@ class PullToRefreshControl: NSObject {
                 }
                 
                 if let footer = footer {
-                    let visiableHeight = point.y + scrollView.frame.height - scrollView.contentInset.bottom - maxHeight()
+                    var visiableHeight: CGFloat = 0
+                    
+                    if let _ = footer as? PullToRefreshHorizontalView {
+                        let maxWidth = max(scrollView.contentSize.width, scrollView.frame.width)
+                        visiableHeight = point.x + scrollView.frame.width - scrollView.contentInset.right - maxWidth
+                    } else {
+                        visiableHeight = point.y + scrollView.frame.height - scrollView.contentInset.bottom - maxHeight()
+                    }
                     
                     var p: CGFloat = 0.0
                     
@@ -173,14 +234,26 @@ class PullToRefreshControl: NSObject {
         } else if keyPath == "contentSize" {
             guard let footer = footer else { return }
             
-            let y = maxHeight() + footer.originalBottom
-            footer.frame.origin.y = y
+            if let f = footer as? PullToRefreshDefaultHorizontalFooter {
+                let maxWidth = max(scrollView.contentSize.width, scrollView.frame.width)
+                footer.frame.origin.x = maxWidth + f.originalRight
+            } else {
+                let y = maxHeight() + footer.originalBottom
+                footer.frame.origin.y = y
+            }
         } else if keyPath == "bounds" {
             if let b = change?[.newKey] as? CGRect {
-                header?.bounds.size.width = b.size.width
-                header?.frame.origin.x = 0
-                footer?.bounds.size.width = b.width
-                footer?.frame.origin.x = 0
+                if self.header is PullToRefreshHorizontalView || footer is PullToRefreshHorizontalView {
+                    header?.bounds.size.height = b.size.height
+                    footer?.bounds.size.height = b.height
+                    header?.frame.origin.y = 0
+                    footer?.frame.origin.y = 0
+                } else {
+                    header?.bounds.size.width = b.size.width
+                    footer?.bounds.size.width = b.width
+                    header?.frame.origin.x = 0
+                    footer?.frame.origin.x = 0
+                }
             }
         }
         

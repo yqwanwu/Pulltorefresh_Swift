@@ -33,10 +33,10 @@ class TestViewController: UIViewController, UITableViewDataSource {
             print("那啥 结束了都")
         })
         
-        p.footer?.addAction(with: .refreshing, action: { [unowned self] in
+        p.footer?.addAction(with: .refreshing, action: { [weak self] in
             //模拟数据请求
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3, execute: {
-                self.p.footer?.endRefresh()
+                self?.p.footer?.endRefresh()
             })
         }).addAction(with: .end, action: {
             print("加载完了")

@@ -31,8 +31,9 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
     ///当滑动到底部时自动加载，不需要上拉，仅对上拉加载有效
     var autoLoadWhenIsBottom = true
     
-    private var actions = [PullToRefreshState:() -> Void]()
+    fileprivate var actions = [PullToRefreshState:() -> Void]()
     
+    //刷新控件的高度
     var refreshHeight: CGFloat = 100.0
     ///修改此属性更改提示信息， 前提是写得有
     var titles: [PullToRefreshState:String] = [.pulling:"下拉刷新", .pullingComplate:"松开刷新", .refreshing:"更新中...", .end:"完成"]
@@ -61,9 +62,6 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
                 case .refreshing:
                     whenRefreshing()
                     self.isHidden = false
-                case .begin:
-                    self.originalTop = self.scrollView.contentInset.top
-                    self.originalBottom = self.scrollView.contentInset.bottom
                 default:
                     break
                 }
@@ -108,6 +106,8 @@ class PullToRefreshView: UIView, UIScrollViewDelegate {
     
     ///刷新中
     func whenRefreshing() {
+        self.originalTop = self.scrollView.contentInset.top
+        self.originalBottom = self.scrollView.contentInset.bottom
         if type == .header {
             scrollView.contentInset.top = refreshHeight + originalTop
         } else {
@@ -426,6 +426,8 @@ class PullToRefreshDefaultGifFooter: PullToRefreshDefaultGifHeader {
         self.titleLabel.frame.origin.y = 0
     }
 }
+
+///横向
 
 
 

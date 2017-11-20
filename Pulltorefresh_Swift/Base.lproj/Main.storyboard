@@ -22,20 +22,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gi1-xC-gtd">
-                                <rect key="frame" x="139" y="153" width="57" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="click me"/>
-                                <connections>
-                                    <segue destination="KUa-CC-pz1" kind="push" id="4rC-BT-1vz"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ieW-uX-gfU">
-                                <rect key="frame" x="119" y="262" width="46" height="30"/>
+                                <rect key="frame" x="111" y="191" width="46" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
                                     <segue destination="ajm-Jv-tVP" kind="push" id="aSB-RM-acY"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fSa-5E-mof">
+                                <rect key="frame" x="112" y="260" width="31" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="横向"/>
+                                <connections>
+                                    <segue destination="Rxk-VX-iU5" kind="push" id="ehC-bl-0Nl"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gi1-xC-gtd">
+                                <rect key="frame" x="111" y="145" width="57" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="click me"/>
+                                <connections>
+                                    <segue destination="KUa-CC-pz1" kind="push" id="4rC-BT-1vz"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -64,6 +72,62 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6xW-vt-Rxz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="405.60000000000002" y="792.95352323838085"/>
+        </scene>
+        <!--Across View Controller-->
+        <scene sceneID="iXy-RX-Xbl">
+            <objects>
+                <viewController id="Rxk-VX-iU5" customClass="AcrossViewController" customModule="Pulltorefresh_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="cJZ-nx-eC1"/>
+                        <viewControllerLayoutGuide type="bottom" id="wMe-ia-llX"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="SEv-TR-ySU">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="eLk-Lw-K9x">
+                                <rect key="frame" x="0.0" y="64" width="375" height="200"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="9SO-Mf-jXg"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="aar-oZ-f1x">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cell" id="saz-Ie-Pay">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </view>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="Rxk-VX-iU5" id="iMB-d7-w41"/>
+                                    <outlet property="delegate" destination="Rxk-VX-iU5" id="Rd9-w5-9kQ"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="eLk-Lw-K9x" firstAttribute="leading" secondItem="SEv-TR-ySU" secondAttribute="leading" id="Lup-iZ-QC9"/>
+                            <constraint firstItem="eLk-Lw-K9x" firstAttribute="top" secondItem="cJZ-nx-eC1" secondAttribute="bottom" id="TsD-3X-WXK"/>
+                            <constraint firstAttribute="trailing" secondItem="eLk-Lw-K9x" secondAttribute="trailing" id="UfJ-qI-V5T"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="AyR-TQ-Paj"/>
+                    <connections>
+                        <outlet property="collectionView" destination="eLk-Lw-K9x" id="vcF-b0-hpg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="b7n-b3-0Ae" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1880.8" y="-94.002998500749626"/>
         </scene>
         <!--Custom Table View Controller-->
         <scene sceneID="aYv-v3-aRF">

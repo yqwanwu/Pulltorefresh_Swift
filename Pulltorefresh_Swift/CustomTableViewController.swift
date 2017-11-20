@@ -17,7 +17,7 @@ class CustomTableViewController: UIViewController, UITableViewDataSource, UITabl
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.contentInset.bottom = 100
+//        tableView.contentInset.bottom = 100
         
         p = PullToRefreshControl(scrollView: tableView).addGifHeader(config: { (gifHeader) in
             gifHeader.gifFrame = CGRect(x: 40, y: 20, width: 100, height: 60)
@@ -53,7 +53,7 @@ class CustomTableViewController: UIViewController, UITableViewDataSource, UITabl
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3, execute: {
                 self?.p.footer?.endRefresh()
                 self?.tableView.reloadData()
-                if self?.counter ?? 0 > 40 {
+                if self?.counter ?? 0 > 30 {
                     self?.p.footer?.state = .noMoreData
                 }
             })

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6828460A1FBED885008886C9 /* AcrossViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682846091FBED885008886C9 /* AcrossViewController.swift */; };
+		682F235D1FC26518001594F9 /* PullToRefreshHorizontalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682F235C1FC26518001594F9 /* PullToRefreshHorizontalView.swift */; };
 		96195F831E9E1F80008ACB33 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96195F821E9E1F80008ACB33 /* AppDelegate.swift */; };
 		96195F851E9E1F80008ACB33 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96195F841E9E1F80008ACB33 /* ViewController.swift */; };
 		96195F881E9E1F80008ACB33 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 96195F861E9E1F80008ACB33 /* Main.storyboard */; };
@@ -25,6 +27,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		682846091FBED885008886C9 /* AcrossViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcrossViewController.swift; sourceTree = "<group>"; };
+		682F235C1FC26518001594F9 /* PullToRefreshHorizontalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullToRefreshHorizontalView.swift; sourceTree = "<group>"; };
 		96195F7F1E9E1F80008ACB33 /* Pulltorefresh_Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pulltorefresh_Swift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		96195F821E9E1F80008ACB33 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		96195F841E9E1F80008ACB33 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -78,6 +82,7 @@
 				96195F841E9E1F80008ACB33 /* ViewController.swift */,
 				96195F9D1E9E1FF2008ACB33 /* CustomTableViewController.swift */,
 				96F12F9D1ECDD9CA004E42FA /* TestViewController.swift */,
+				682846091FBED885008886C9 /* AcrossViewController.swift */,
 				96195F941E9E1F9A008ACB33 /* pulltoRefresh */,
 				96195F861E9E1F80008ACB33 /* Main.storyboard */,
 				96195FA31E9F6A0E008ACB33 /* luufy.gif */,
@@ -97,6 +102,7 @@
 				96195F951E9E1FA4008ACB33 /* TimerExtension.swift */,
 				96195F961E9E1FA4008ACB33 /* CircleProgressView.swift */,
 				96195F971E9E1FA4008ACB33 /* PullToRefreshView.swift */,
+				682F235C1FC26518001594F9 /* PullToRefreshHorizontalView.swift */,
 				96195F981E9E1FA4008ACB33 /* PullToRefreshControl.swift */,
 			);
 			path = pulltoRefresh;
@@ -179,12 +185,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				682F235D1FC26518001594F9 /* PullToRefreshHorizontalView.swift in Sources */,
 				96195F851E9E1F80008ACB33 /* ViewController.swift in Sources */,
 				96195F9A1E9E1FA4008ACB33 /* CircleProgressView.swift in Sources */,
 				96F12F9E1ECDD9CA004E42FA /* TestViewController.swift in Sources */,
 				96195F831E9E1F80008ACB33 /* AppDelegate.swift in Sources */,
 				96195F9C1E9E1FA4008ACB33 /* PullToRefreshControl.swift in Sources */,
 				96195F991E9E1FA4008ACB33 /* TimerExtension.swift in Sources */,
+				6828460A1FBED885008886C9 /* AcrossViewController.swift in Sources */,
 				96195F9E1E9E1FF2008ACB33 /* CustomTableViewController.swift in Sources */,
 				96195F9B1E9E1FA4008ACB33 /* PullToRefreshView.swift in Sources */,
 			);
