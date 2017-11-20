@@ -11,6 +11,9 @@ import UIKit
 class AcrossViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var collectionView: UICollectionView!
     var p: PullToRefreshControl!
+    
+    var counter = 4
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,24 +29,26 @@ class AcrossViewController: UIViewController, UICollectionViewDataSource, UIColl
         p.header?.addAction(with: .refreshing, action: { [weak self] in
             DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                 self?.p.header?.endRefresh()
+                self?.counter = 4
+                self?.collectionView.reloadData()
             })
         })
         
-        var counter = 0
         p.footer?.addAction(with: .refreshing, action: { [weak self] in
             DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                 self?.p.footer?.endRefresh()
-                counter += 1
-                if counter % 3 == 0 {
+                self?.counter += 4
+                if self?.counter ?? 0 > 12 {
                     print("没有更多数据开启")
                     self?.p.footer?.state = .noMoreData
                 }
+                self?.collectionView.reloadData()
             })
         })
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 8
+        return counter
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
